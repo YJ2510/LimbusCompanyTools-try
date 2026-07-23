@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LimbusCompanyTool中文测试页面</title>
+    <title>LimbusCompanyTool测试页面</title>
     <style>
         * {
             margin: 0;
@@ -27,6 +27,10 @@
             color: #eeeeee;
             margin: 24px 0;
             font-weight: normal;
+        }
+        h3{
+            color:#eee;
+            margin:12px 0;
         }
         a{
             color:#87cefa;
@@ -103,7 +107,7 @@
             background:#424141;
             padding:28px;
             border-radius:12px;
-            max-width:400px;
+            max-width:460px;
             width:90%;
         }
         .modal-box h3{
@@ -113,8 +117,18 @@
         }
         .modal-box p{
             color:#dddddd;
-            margin-bottom:24px;
+            margin-bottom:16px;
             line-height:1.6;
+        }
+        .modal-box textarea{
+            width:100%;
+            background:#2c2c2c;
+            color:#fff;
+            border:1px solid #555;
+            border-radius:6px;
+            padding:10px;
+            min-height:100px;
+            margin-bottom:20px;
         }
         .modal-buttons{
             display:flex;
@@ -140,24 +154,150 @@
             padding:9px 22px;
             border-radius:8px;
         }
+        .btn-group{
+            display:flex;
+            gap:10px;
+            justify-content:center;
+            margin-top:20px;
+            flex-wrap:wrap;
+        }
+        /* 积分容器一行布局 */
+        .score-row{
+            display:flex;
+            gap:14px;
+            justify-content:center;
+            flex-wrap:wrap;
+            margin-bottom:12px;
+        }
+        .score-card-normal{
+            background:#424141;
+            padding:12px 20px;
+            border-radius:10px;
+            border:2px solid #ffdd44;
+        }
+        .score-card-hard{
+            background:#424141;
+            padding:12px 20px;
+            border-radius:10px;
+            border:2px solid #ff9966;
+        }
+        /* 附加挑战表格 */
+        .extra-table{
+            width:100%;
+            border-collapse: collapse;
+            margin-top:12px;
+        }
+        .extra-table th,.extra-table td{
+            border:1px solid #666;
+            padding:8px;
+            color:#fff;
+            text-align:center;
+            font-size:15px;
+        }
+        .extra-table th{
+            background:#333;
+        }
+        .extra-control{
+            display:flex;
+            gap:8px;
+            justify-content:center;
+            align-items:center;
+            flex-wrap:wrap;
+            margin-top:12px;
+        }
+        .extra-control input{
+            width:55px;
+            padding:6px;
+            border-radius:6px;
+            border:none;
+            outline:none;
+            text-align:center;
+        }
+        /* DIY挑战区域 */
+        .diy-wrap{
+            max-width:900px;
+            margin:30px auto;
+            background:#424141;
+            border-radius:12px;
+            padding:16px;
+        }
+        .template-select{
+            width:100%;
+            padding:8px;
+            border-radius:6px;
+            margin:10px 0;
+            font-size:15px;
+        }
+        .param-row{
+            display:flex;
+            gap:10px;
+            flex-wrap:wrap;
+            align-items:center;
+            margin:8px 0;
+            color:#ddd;
+            justify-content:center;
+        }
+        .param-row input,.param-row select{
+            padding:6px;
+            border-radius:6px;
+            border:none;
+            outline:none;
+        }
+        .diy-table{
+            width:100%;
+            border-collapse:collapse;
+            margin-top:12px;
+        }
+        .diy-table th,.diy-table td{
+            border:1px solid #666;
+            color:#fff;
+            padding:8px;
+            text-align:center;
+        }
+        .diy-table th{
+            background:#333;
+        }
+        .btn-del-line{
+            background:#993333;
+            color:#fff;
+            border:none;
+            padding:4px 8px;
+            border-radius:4px;
+        }
     </style>
 </head>
 <body>
-    <h1>欢迎来到<i>LimbusCompanyTool</i>中文测试页面</h1>
+    <h1>欢迎来到<i>LimbusCompanyTool</i>测试页面</h1>
 
-    <!-- 积分显示区域 -->
-    <div style="text-align:center; color:#ffdd44; font-size:24px; margin-bottom:12px;">
-        普通难度积分：<span id="normalPoint">0</span>
+    <!-- 积分区域：普通、困难积分同行，各自独立边框 -->
+    <div class="score-row">
+        <div class="score-card-normal" style="color:#ffdd44; font-size:24px;">
+            普通难度积分：<span id="normalPoint">0</span>
+        </div>
+        <div class="score-card-hard" style="color:#ff9966; font-size:24px;">
+            困难难度积分：<span id="hardPoint">0</span>
+        </div>
     </div>
-    <div style="text-align:center; color:#ff9966; font-size:24px; margin-bottom:12px;">
-        困难难度积分：<span id="hardPoint">0</span>
-    </div>
-    <div style="text-align:center; color:#ffffff; font-size:26px; margin-bottom:24px;">
+    <div style="text-align:center; color:#ffffff; font-size:26px; margin-bottom:12px;">
         ✦ 总但丁积分：<span id="totalPoint">0</span> ✦
     </div>
+    <!-- 存档按钮组 -->
+    <div class="btn-group">
+        <button onclick="openExportModal()" style="padding:9px 16px; background:#337733; color:white; border-radius:8px;">导出存档</button>
+        <button onclick="openImportModal()" style="padding:9px 16px; background:#337733; color:white; border-radius:8px;">导入存档</button>
+    </div>
+    <div style="margin-bottom:24px;"></div>
 
     <h2><p><a href="https://limbuscompany.huijiwiki.com/wiki/" target="_blank">点击以访问LimbusCompany中文维基</a></p></h2>
-
+        <style>
+        h2{
+            text-align: center;
+            color: #eeeeee;
+            margin: 24px 0;
+            font-weight: normal;
+        }
+    </style>
+    <h2>⚠️注：此网站为LimbusCompanyTools测试网站，未公开也并未完善⚠️</h2>
 <div style="text-align:center; margin:30px 0;">
     <h2 style="display: inline-block;font-size: 30px; margin-right:12px;">镜牢挑战</h2>
     <button id="btn" onclick="showText()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#555555; color:#fff;">展开</button>
@@ -167,23 +307,106 @@
     <div class="row-wrap">
         <!-- ==========普通难度分区========== -->
         <div class="col">
-            <h2 style="margin-bottom:16px;">普通难度抽取</h2>
-            <button onclick="startDrawNormal()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#446699; color:white;">开始抽取</button>
+            <h2 style="margin-bottom:16px;">普通难度抽取</h2><span>生成条数：</span>
+<input id="normalRuleCount" type="number" min="1" max="8" value="3">
+            <button id="btnNormalDraw" onclick="startDrawNormal()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#446699; color:white;">开始抽取</button>
             <div id="resultNormal" style="margin-top:20px; font-size:22px; color:#fff; line-height:1.6;"></div>
             <button id="addNormalBtn" disabled onclick="addNormalPoint()" style="padding:10px 24px; font-size:18px; border-radius:8px; margin-top:20px; background:#339933; color:white;">
-                完成本次挑战 +5积分
+                完成本次挑战
             </button>
+            <hr style="margin:20px 0; border-color:#555;">
+            <h3 style="color:#ddd;margin-bottom:12px;">附加挑战抽取</h3>
+            <div class="extra-control">
+                <span style="color:#ddd;">条数</span>
+                <input type="number" id="extraNormalCount" min="1" max="10" value="1">
+                <button id="btnExtraNormal" onclick="startExtraNormal()" style="padding:6px 12px; background:#664499; color:white; border-radius:8px;">抽取</button>
+                <button onclick="clearExtraNormal()" style="padding:6px 12px; background:#666; color:white; border-radius:8px;">清空列表</button>
+            </div>
+            <table class="extra-table" id="extraNormalTable">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>挑战条件</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
 
         <!-- ==========困难难度分区========== -->
         <div class="col">
             <h2 style="margin-bottom:16px;">困难难度抽取</h2>
-            <button onclick="startDrawHard()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#773333; color:white;">开始抽取</button>
-            <div id="resultHard" style="margin-top:20px; font-size:22px; color:#fff; line-height:1.6;"></div>
+            <span>生成条数：</span>
+<input id="hardRuleCount" type="number" min="1" max="8" value="4">
+            <button id="btnHardDraw" onclick="startDrawHard()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#773333; color:white;">开始抽取</button>
+            <div id="resultHard" style="margin-top:20px; font-size:22px; color:#fff; line-height:1.6;white-space:pre-line;text-align:left;padding:0 10px;"></div>
             <button id="addHardBtn" disabled onclick="addHardPoint()" style="padding:10px 24px; font-size:18px; border-radius:8px; margin-top:20px; background:#cc5522; color:white;">
-                完成本次挑战 +10积分
+                完成本次挑战
             </button>
+            <hr style="margin:20px 0; border-color:#555;">
+            <h3 style="color:#ddd;margin-bottom:12px;">附加挑战抽取</h3>
+            <div class="extra-control">
+                <span style="color:#ddd;">条数</span>
+                <input type="number" id="extraHardCount" min="1" max="10" value="1">
+                <button id="btnExtraHard" onclick="startExtraHard()" style="padding:6px 12px; background:#664499; color:white; border-radius:8px;">抽取</button>
+                <button onclick="clearExtraHard()" style="padding:6px 12px; background:#666; color:white; border-radius:8px;">清空列表</button>
+            </div>
+            <table class="extra-table" id="extraHardTable">
+                <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>挑战条件</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
         </div>
+    </div>
+
+    <!-- ============ DIY挑战模块【扩充模板完整版】 ============ -->
+    <div class="diy-wrap">
+        <h2>DIY挑战</h2>
+        <select class="template-select" id="templateSelect">
+            <option value="t1">在（层数）层不可以获得（限制条件）</option>
+            <option value="t2">本次挑战必须携带（限制条件）进入镜牢</option>
+            <option value="t3">到达（层数）层前，不能使用（技能）技能</option>
+            <option value="t4">（层数）层结束前，禁止拾取任何补给</option>
+            <option value="t7">上场人数不能超过（人数）人</option>
+            <option value="t8">在（层数）层不可以使用（技能）技能</option>
+            <option value="t9">本次挑战必须携带（限制条件）进入镜牢</option>
+            <option value="t10">到达（层数）层前，不能使用（技能）技能</option>
+            <option value="t11">（层数）层结束前，不可以获得（限制条件）</option>
+            <option value="t12">{sin}的血量低于（百分比）%时，走事件不能触发遭遇战</option>
+            <option value="t13">全队平均血量低于（百分比）%时，走事件不能触发遭遇战</option>
+            <option value="t14">禁止选择{pack1}卡包</option>
+            <option value="t15">在第{n}层走{pack2}卡包</option>
+            <option value="t16">仅可编入{n}名罪人</option>
+            <option value="t17">禁止观测{cond}饰品</option>
+            <option value="t18">禁止判定{judge}</option>
+            <option value="t19">禁止选择{rewardType}</option>
+            <option value="t20">禁止选择{pack3}卡包</option>
+            <option value="t21">随机抽取{n}个{pack3}卡包</option>
+            <option value="t22">最后一层走{pack2}卡包</option>
+            <option value="t23">整局经费不可超过{n}</option>
+            <option value="t24">全程只允许编入{n}名罪人</option>
+        </select>
+        <div class="param-row" id="paramArea">
+        </div>
+        <div class="btn-group">
+            <button onclick="createDiyItem()" style="padding:8px 18px;background:#447744;color:#fff;border-radius:8px;">创建本条挑战</button>
+            <button onclick="clearAllDiy()" style="padding:8px 18px;background:#773333;color:#fff;border-radius:8px;">一键清空DIY列表</button>
+        </div>
+        <h3 style="margin-top:16px;">已选择DIY挑战列表</h3>
+        <table class="diy-table" id="diyTable">
+            <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>挑战内容</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
     </div>
 </div>
 
@@ -213,7 +436,7 @@
     <div class="modal-mask" id="successNormalModal">
         <div class="modal-box">
             <h3>✅ 挑战完成</h3>
-            <p>普通难度挑战完成！获得5积分！</p>
+            <p id="textNormalResult"></p>
             <div class="modal-buttons">
                 <button class="btn-single" onclick="closeSuccessNormalModal()">确定</button>
             </div>
@@ -223,7 +446,7 @@
     <div class="modal-mask" id="successHardModal">
         <div class="modal-box">
             <h3>✅ 挑战完成</h3>
-            <p>困难难度挑战完成！获得10积分！</p>
+            <p id="textHardResult"></p>
             <div class="modal-buttons">
                 <button class="btn-single" onclick="closeSuccessHardModal()">确定</button>
             </div>
@@ -236,6 +459,50 @@
             <p>积分已全部清除！</p>
             <div class="modal-buttons">
                 <button class="btn-single" onclick="closeClearSuccessModal()">确定</button>
+            </div>
+        </div>
+    </div>
+    <!-- 导出存档弹窗 -->
+    <div class="modal-mask" id="exportModal">
+        <div class="modal-box">
+            <h3>📤 导出存档</h3>
+            <p>复制下方全部文本妥善保存，换机时导入即可恢复积分</p>
+            <textarea id="exportText" readonly></textarea>
+            <div class="modal-buttons">
+                <button class="btn-single" onclick="copyExport()">复制存档</button>
+                <button class="btn-cancel" onclick="closeExportModal()">关闭</button>
+            </div>
+        </div>
+    </div>
+    <!-- 导入存档弹窗 -->
+    <div class="modal-mask" id="importModal">
+        <div class="modal-box">
+            <h3>📥 导入存档</h3>
+            <p>粘贴你之前导出的存档文本，确认后覆盖当前积分</p>
+            <textarea id="importText" placeholder="粘贴存档字符串..."></textarea>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeImportModal()">取消</button>
+                <button class="btn-confirm" onclick="importSave()">导入存档</button>
+            </div>
+        </div>
+    </div>
+    <!-- 导入成功弹窗 -->
+    <div class="modal-mask" id="importSuccessModal">
+        <div class="modal-box">
+            <h3>✅ 导入成功</h3>
+            <p>积分数据已恢复！</p>
+            <div class="modal-buttons">
+                <button class="btn-single" onclick="closeImportSuccessModal()">确定</button>
+            </div>
+        </div>
+    </div>
+    <!-- 导入失败弹窗 -->
+    <div class="modal-mask" id="importFailModal">
+        <div class="modal-box">
+            <h3>❌ 导入失败</h3>
+            <p>存档格式错误，请确认粘贴完整的存档文本！</p>
+            <div class="modal-buttons">
+                <button class="btn-single" onclick="closeImportFailModal()">确定</button>
             </div>
         </div>
     </div>
@@ -254,11 +521,260 @@ const addHardBtn = document.getElementById("addHardBtn");
 const resultNormal = document.getElementById("resultNormal");
 const resultHard = document.getElementById("resultHard");
 
+const btnNormalDraw = document.getElementById("btnNormalDraw");
+const btnHardDraw = document.getElementById("btnHardDraw");
+const btnExtraNormal = document.getElementById("btnExtraNormal");
+const btnExtraHard = document.getElementById("btnExtraHard");
+
 // 弹窗DOM
 const clearModal = document.getElementById("clearModal");
 const successNormalModal = document.getElementById("successNormalModal");
 const successHardModal = document.getElementById("successHardModal");
 const clearSuccessModal = document.getElementById("clearSuccessModal");
+const exportModal = document.getElementById("exportModal");
+const importModal = document.getElementById("importModal");
+const importSuccessModal = document.getElementById("importSuccessModal");
+const importFailModal = document.getElementById("importFailModal");
+const exportText = document.getElementById("exportText");
+const importText = document.getElementById("importText");
+const textNormalResult = document.getElementById("textNormalResult");
+const textHardResult = document.getElementById("textHardResult");
+
+// DIY相关DOM
+const templateSelect = document.getElementById("templateSelect");
+const paramArea = document.getElementById("paramArea");
+const diyTableBody = document.querySelector("#diyTable tbody");
+
+const condOptionList = [
+    "E.G.O饰品",
+    "泛用E.G.O饰品",
+    "烧伤E.G.O饰品",
+    "流血E.G.O饰品",
+    "震颤E.G.O饰品",
+    "沉沦E.G.O饰品",
+    "破裂E.G.O饰品",
+    "呼吸法E.G.O饰品",
+    "充能E.G.O饰品",
+    "斩击E.G.O饰品",
+    "打击E.G.O饰品",
+    "突刺E.G.O饰品",
+    "一级E.G.O饰品",
+    "二级E.G.O饰品",
+    "三级E.G.O饰品",
+    "四级E.G.O饰品",
+    "五级E.G.O饰品",
+    "EX E.G.O饰品"
+];
+const skillOptionList = [
+    "反击",
+    "防御",
+    "闪避",
+    "守备技能",
+    "突刺技能",
+    "斩击技能",
+    "打击技能"
+];
+// 罪人名单【1~12顺序】
+const sinnerNameList = [
+    "李箱",
+    "浮士德",
+    "堂吉诃德",
+    "良秀",
+    "默尔索",
+    "鸿路",
+    "希斯克里夫",
+    "以实玛丽",
+    "罗佳",
+    "辛克莱",
+    "奥提斯",
+    "格里高尔"
+];
+// 卡包列表1（预留，后续自行添加）
+const packList1 = [
+    "【待补充卡包】",
+    "【待补充卡包】",
+    "【待补充卡包】"
+];
+// 卡包列表2（固定）
+const packList2 = [
+    "紫色编码",
+    "三号线",
+    "无尽的死路",
+    "仲冬夜之梦3",
+    "永恒的枷锁",
+    "一号线·疯狂"
+];
+// 卡包列表3（预留）
+const packList3 = [
+    "【待补充卡包3】",
+    "【待补充卡包3】",
+    "【待补充卡包3】"
+];
+// 判定选项
+const judgeList = ["成功","失败"];
+// 奖励类型
+const rewardTypeList = ["奖励饰品","遭遇战奖励","追加的苦难的饰品"];
+
+// 模板配置
+const templateConf = {
+    t1: {text:"在（{n}）层不可以获得{c}", needNum:true, needCond:true, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t2: {text:"本次挑战必须携带{c}进入镜牢", needNum:false, needCond:true, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t3: {text:"到达（{n}）层前，不能使用{s}技能", needNum:true, needCond:false, needSkill:true, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t4: {text:"（{n}）层结束前，禁止拾取任何补给", needNum:true, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t7: {text:"上场人数不能超过{n}人", needNum:true, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t8: {text:"在（{n}）层不可以使用{s}技能", needNum:true, needCond:false, needSkill:true, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t9: {text:"本次挑战必须携带{c}进入镜牢", needNum:false, needCond:true, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t10: {text:"到达（{n}）层前，不能使用{s}技能", needNum:true, needCond:false, needSkill:true, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t11: {text:"（{n}）层结束前，不可以获得{c}", needNum:true, needCond:true, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t12: {text:"{sin}的血量低于{n}%时，走事件不能触发遭遇战", needNum:true, needCond:false, needSkill:false, needSinner:true, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t13: {text:"全队平均血量低于{n}%时，走事件不能触发遭遇战", needNum:true, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t14: {text:"禁止选择{pack1}卡包", needNum:false, needCond:false, needSkill:false, needSinner:false, needPack1:true, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t15: {text:"在第{n}层走{pack2}卡包", needNum:true, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:true, needPack3:false, needJudge:false, needReward:false},
+    t16: {text:"仅可编入{n}名罪人", needNum:true, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t17: {text:"禁止观测{cond}饰品", needNum:false, needCond:true, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t18: {text:"禁止判定{judge}", needNum:false, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:true, needReward:false},
+    t19: {text:"禁止选择{rewardType}", needNum:false, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:true},
+    t20: {text:"禁止选择{pack3}卡包", needNum:false, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:true, needJudge:false, needReward:false},
+    t21: {text:"随机抽取{n}个{pack3}卡包", needNum:true, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:true, needJudge:false, needReward:false},
+    t22: {text:"最后一层走{pack2}卡包", needNum:false, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:true, needPack3:false, needJudge:false, needReward:false},
+    t23: {text:"整局经费不可超过{n}", needNum:true, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+    t24: {text:"全程只允许编入{n}名罪人", needNum:true, needCond:false, needSkill:false, needSinner:false, needPack1:false, needPack2:false, needPack3:false, needJudge:false, needReward:false},
+};
+
+// 切换模板，动态渲染参数
+templateSelect.onchange = function(){
+    const key = this.value;
+    const cfg = templateConf[key];
+    let html = "";
+    // 默认数值配置
+    let numDefault = 5;
+    let numMin = 1;
+    let numMax = 15;
+    let numLabel = "层数";
+
+    if(key === "t7" || key === "t16" || key === "t24"){
+        numDefault = 3; numMin = 1; numMax =7; numLabel="人数";
+    }else if(key === "t12" || key === "t13"){
+        numDefault = 50; numMin =10; numMax=90; numLabel="百分比";
+    }else if(key === "t15"){
+        numDefault = 11; numMin =11; numMax=15; numLabel="层数";
+    }else if(key === "t21"){
+        numDefault = 2; numMin =1; numMax=5; numLabel="数量";
+    }else if(key === "t23"){
+        numDefault = 1750; numMin =1500; numMax=2000; numLabel="经费";
+    }
+
+    // 需要罪人名称下拉
+    if(cfg.needSinner){
+        html += `<span>罪人：</span><select id="p_sin">`;
+        sinnerNameList.forEach(name=> html += `<option>${name}</option>`);
+        html += `</select>`;
+    }
+    // 需要卡包1
+    if(cfg.needPack1){
+        html += `<span>卡包：</span><select id="p_pack1">`;
+        packList1.forEach(name=> html += `<option>${name}</option>`);
+        html += `</select>`;
+    }
+    // 需要卡包2
+    if(cfg.needPack2){
+        html += `<span>卡包：</span><select id="p_pack2">`;
+        packList2.forEach(name=> html += `<option>${name}</option>`);
+        html += `</select>`;
+    }
+    // 需要卡包3
+    if(cfg.needPack3){
+        html += `<span>卡包：</span><select id="p_pack3">`;
+        packList3.forEach(name=> html += `<option>${name}</option>`);
+        html += `</select>`;
+    }
+    if(cfg.needNum){
+        html += `<span>${numLabel}：</span><input type="number" id="p_num" min="${numMin}" max="${numMax}" value="${numDefault}">`;
+    }
+    if(cfg.needCond){
+        html += `<span>饰品：</span><select id="p_cond">`;
+        condOptionList.forEach(opt=> html += `<option>${opt}</option>`);
+        html += `</select>`;
+    }
+    if(cfg.needSkill){
+        html += `<span>技能：</span><select id="p_skill">`;
+        skillOptionList.forEach(opt=> html += `<option>${opt}</option>`);
+        html += `</select>`;
+    }
+    if(cfg.needJudge){
+        html += `<span>判定结果：</span><select id="p_judge">`;
+        judgeList.forEach(opt=> html += `<option>${opt}</option>`);
+        html += `</select>`;
+    }
+    if(cfg.needReward){
+        html += `<span>奖励类型：</span><select id="p_reward">`;
+        rewardTypeList.forEach(opt=> html += `<option>${opt}</option>`);
+        html += `</select>`;
+    }
+    paramArea.innerHTML = html;
+}
+
+// 创建DIY条目
+function createDiyItem(){
+    const key = templateSelect.value;
+    const cfg = templateConf[key];
+    let numVal = "";
+    let condVal = "";
+    let skillVal = "";
+    let sinVal = "";
+    let pack1Val = "";
+    let pack2Val = "";
+    let pack3Val = "";
+    let judgeVal = "";
+    let rewardVal = "";
+
+    if(cfg.needNum) numVal = document.getElementById("p_num").value;
+    if(cfg.needCond) condVal = document.getElementById("p_cond").value;
+    if(cfg.needSkill) skillVal = document.getElementById("p_skill").value;
+    if(cfg.needSinner) sinVal = document.getElementById("p_sin").value;
+    if(cfg.needPack1) pack1Val = document.getElementById("p_pack1").value;
+    if(cfg.needPack2) pack2Val = document.getElementById("p_pack2").value;
+    if(cfg.needPack3) pack3Val = document.getElementById("p_pack3").value;
+    if(cfg.needJudge) judgeVal = document.getElementById("p_judge").value;
+    if(cfg.needReward) rewardVal = document.getElementById("p_reward").value;
+
+    let str = cfg.text
+        .replace("{n}",numVal)
+        .replace("{c}",condVal)
+        .replace("{s}",skillVal)
+        .replace("{sin}",sinVal)
+        .replace("{pack1}",pack1Val)
+        .replace("{pack2}",pack2Val)
+        .replace("{pack3}",pack3Val)
+        .replace("{judge}",judgeVal)
+        .replace("{rewardType}",rewardVal);
+
+    const tr = document.createElement("tr");
+    const td1 = document.createElement("td");
+    const td2 = document.createElement("td");
+    const td3 = document.createElement("td");
+    td1.innerText = diyTableBody.children.length + 1;
+    td2.innerText = str;
+    td3.innerHTML = `<button class="btn-del-line" onclick="removeDiyRow(this)">删除</button>`;
+    tr.appendChild(td1);
+    tr.appendChild(td2);
+    tr.appendChild(td3);
+    diyTableBody.appendChild(tr);
+}
+// 删除单行
+function removeDiyRow(btn){
+    const tr = btn.closest("tr");
+    tr.remove();
+    // 重排序号
+    const rows = diyTableBody.querySelectorAll("tr");
+    rows.forEach((r,i)=>{
+        r.children[0].innerText = i+1;
+    })
+}
+// 清空DIY列表
+function clearAllDiy(){
+    diyTableBody.innerHTML = "";
+}
 
 // 刷新所有积分（自动计算总分）
 function refreshPointView(){
@@ -300,17 +816,334 @@ function closeClearSuccessModal(){
     clearSuccessModal.style.display = "none";
 }
 
-// 普通难度加分 +5
+function openExportModal(){
+    const saveObj = {
+        normal: normalPoint,
+        hard: hardPoint
+    }
+    exportText.value = btoa(JSON.stringify(saveObj));
+    exportModal.style.display = "flex";
+}
+function closeExportModal(){
+    exportModal.style.display = "none";
+}
+async function copyExport(){
+    exportText.select();
+    await navigator.clipboard.writeText(exportText.value);
+}
+
+function openImportModal(){
+    importText.value = "";
+    importModal.style.display = "flex";
+}
+function closeImportModal(){
+    importModal.style.display = "none";
+}
+function openImportSuccessModal(){
+    importSuccessModal.style.display = "flex";
+}
+function closeImportSuccessModal(){
+    importSuccessModal.style.display = "none";
+}
+function openImportFailModal(){
+    importFailModal.style.display = "flex";
+}
+function closeImportFailModal(){
+    importFailModal.style.display = "none";
+}
+
+// 导入存档逻辑
+function importSave(){
+    try{
+        const str = importText.value.trim();
+        const jsonStr = atob(str);
+        const saveData = JSON.parse(jsonStr);
+        normalPoint = Number(saveData.normal) || 0;
+        hardPoint = Number(saveData.hard) || 0;
+        refreshPointView();
+        closeImportModal();
+        openImportSuccessModal();
+    }catch(err){
+        openImportFailModal();
+    }
+}
+
+// 随机工具
+function getRandomInt(min,max){
+    return Math.floor(Math.random()*(max-min+1))+min;
+}
+function randomPick(arr){
+    return arr[getRandomInt(0,arr.length-1)];
+}
+
+// ==========普通难度抽取（保留原有）==========
+function startDrawNormal(){
+    const pickCount = +document.getElementById("normalRuleCount").value || 3;
+
+    const normalRuleTemplates = [
+        "在商店里禁止治疗罪人",
+        "仅可使用商店的治疗罪人或技能与被动来或事件治疗罪人（若奖励有治疗类E.G.O.可以拿 但是不可以进入战斗 恢复理智不算）",
+        "整局经费不可超过2000",
+        "禁止选择遭遇战奖励",
+        "禁止选择奖励的E.G.O饰品（观测和体系选择的饰品可以拿）",
+        "禁止判定失败",
+        "禁止观测泛用饰品"
+    ];
+
+    const banPackRuleTemplates = [];
+    packList1.forEach(p=>banPackRuleTemplates.push(`禁止选择{pack}卡包`));
+    packList3.forEach(p=>banPackRuleTemplates.push(`禁止选择{pack}卡包`));
+
+    const allTemplates = [...normalRuleTemplates, ...banPackRuleTemplates];
+
+    const selected = [];
+    while(selected.length < pickCount){
+        const idx = getRandomInt(0, allTemplates.length-1);
+        let rule = allTemplates[idx];
+        if(rule.includes("{pack}")){
+            const sourcePacks = [...packList1, ...packList3];
+            const numPick = getRandomInt(1,5);
+            const pickedPacks = [];
+            const packUsed = new Set();
+            while(pickedPacks.length < numPick){
+                const pi = getRandomInt(0, sourcePacks.length-1);
+                if(!packUsed.has(pi)){
+                    packUsed.add(pi);
+                    pickedPacks.push(sourcePacks[pi]);
+                }
+            }
+            rule = `禁止选择${pickedPacks.join("、")}卡包`;
+        }
+        selected.push(rule);
+    }
+
+    let outText = "【普通随机挑战】\n";
+    selected.forEach((r,i)=>{
+        outText += `${i+1}. ${r}\n`;
+    });
+    resultNormal.innerText = outText;
+    addNormalBtn.disabled = false;
+    btnNormalDraw.innerText = "再次抽取";
+}
+
+// ==========困难难度抽取【修改后】==========
+function startDrawHard(){
+    const pickCount = +document.getElementById("hardRuleCount").value || 4;
+
+    const normalRuleTemplates = [];
+    packList2.forEach(p=>{
+        normalRuleTemplates.push(`在第${getRandomInt(11,15)}层走${p}卡包`);
+    });
+    packList2.forEach(p=>{
+        normalRuleTemplates.push(`最后一层走${p}卡包`);
+    });
+    normalRuleTemplates.push(`整局经费不可超过${getRandomInt(1500,2000)}`);
+    normalRuleTemplates.push(`全程只允许编入${getRandomInt(1,7)}名罪人`);
+    condOptionList.forEach(c=>{
+        normalRuleTemplates.push(`禁止观测${c}`);
+    });
+    judgeList.forEach(j=>{
+        normalRuleTemplates.push(`禁止判定${j}`);
+    });
+    rewardTypeList.forEach(r=>{
+        normalRuleTemplates.push(`禁止选择${r}`);
+    });
+    sinnerNameList.forEach(sin=>{
+        normalRuleTemplates.push(`${sin}的血量低于${getRandomInt(10,90)}%时，走事件不能触发遭遇战`);
+    });
+    normalRuleTemplates.push(`全队平均血量低于${getRandomInt(10,90)}%时，走事件不能触发遭遇战`);
+    condOptionList.forEach(c=>{
+        normalRuleTemplates.push(`在（${getRandomInt(1,15)}）层不可以获得${c}`);
+    });
+    condOptionList.forEach(c=>{
+        normalRuleTemplates.push(`本次挑战必须携带${c}进入镜牢`);
+    });
+    skillOptionList.forEach(sk=>{
+        normalRuleTemplates.push(`到达（${getRandomInt(1,14)}）层前，不能使用${sk}技能`);
+        normalRuleTemplates.push(`在（${getRandomInt(1,15)}）层不可以使用${sk}技能`);
+    });
+    normalRuleTemplates.push(`（${getRandomInt(1,15)}）层结束前，禁止拾取任何补给`);
+
+    const banPackRuleTemplates = [];
+    packList1.forEach(p=>banPackRuleTemplates.push(`禁止选择{pack}卡包`));
+    packList3.forEach(p=>banPackRuleTemplates.push(`禁止选择{pack}卡包`));
+
+    const allTemplates = [...normalRuleTemplates, ...banPackRuleTemplates];
+
+    const selected = [];
+    // ===== 删除usedIndex，不再强制不重复，杜绝死循环 =====
+    while(selected.length < pickCount){
+        const idx = getRandomInt(0, allTemplates.length-1);
+        let rule = allTemplates[idx];
+        if(rule.includes("{pack}")){
+            const sourcePacks = [...packList1, ...packList3];
+            const numPick = getRandomInt(1,5);
+            const pickedPacks = [];
+            const packUsed = new Set();
+            while(pickedPacks.length < numPick){
+                const pi = getRandomInt(0, sourcePacks.length-1);
+                if(!packUsed.has(pi)){
+                    packUsed.add(pi);
+                    pickedPacks.push(sourcePacks[pi]);
+                }
+            }
+            rule = `禁止选择${pickedPacks.join("、")}卡包`;
+        }
+        selected.push(rule);
+    }
+
+    let outText = "【困难随机挑战】\n";
+    selected.forEach((r,i)=>{
+        outText += `${i+1}. ${r}\n`;
+    });
+    resultHard.innerText = outText;
+    addHardBtn.disabled = false;
+    btnHardDraw.innerText = "再次抽取";
+}
+// 展开收起
+function showText(){
+    let box = document.getElementById("content");
+    let button = document.getElementById("btn");
+    if(box.style.display === "none"){
+        box.style.display = "block";
+        button.innerText = "收起";
+    }else{
+        box.style.display = "none";
+        button.innerText = "展开";
+    }
+}
+
+// =========附加挑战抽取核心逻辑==========
+const extraTemplateList = [
+    "在（{num}）层不可以使用{skill}技能",
+    "本次挑战必须携带{cond}进入镜牢",
+    "到达{num}层前，不能使用{skill}技能",
+    "{num}层结束前，不可以获得{cond}",
+    "全队生命值低于{num}%时，走事件不能触发遭遇战"
+];
+const SkillPool = [
+    "反击",
+    "防御",
+    "闪避",
+    "守备技能",
+    "突刺技能",
+    "斩击技能",
+    "打击技能"
+];
+const condPool = [
+    "E.G.O饰品",
+    "泛用E.G.O饰品",
+    "烧伤E.G.O饰品",
+    "流血E.G.O饰品",
+    "震颤E.G.O饰品",
+    "沉沦E.G.O饰品",
+    "破裂E.G.O饰品",
+    "呼吸法E.G.O饰品",
+    "充能E.G.O饰品",
+    "斩击E.G.O饰品",
+    "打击E.G.O饰品",
+    "突刺E.G.O饰品",
+    "一级E.G.O饰品",
+    "二级E.G.O饰品",
+    "三级E.G.O饰品",
+    "四级E.G.O饰品",
+    "五级E.G.O饰品",
+    "EX E.G.O饰品"
+];
+
+// 普通难度附加规则（随机数字1~5）
+function generateExtraRuleNormal(){
+    const template = extraTemplateList[getRandomInt(0,extraTemplateList.length-1)];
+    const num = getRandomInt(1,5);
+    const cond = condPool[getRandomInt(0,condPool.length-1)];
+    const skill = SkillPool[getRandomInt(0,SkillPool.length-1)];
+    return template.replace("{num}",num).replace("{cond}",cond).replace("{skill}",skill);
+}
+// 困难难度附加规则（随机数字1~15）
+function generateExtraRuleHard(){
+    const template = extraTemplateList[getRandomInt(0,extraTemplateList.length-1)];
+    const num = getRandomInt(1,15);
+    const cond = condPool[getRandomInt(0,condPool.length-1)];
+    const skill = SkillPool[getRandomInt(0,SkillPool.length-1)];
+    return template.replace("{num}",num).replace("{cond}",cond).replace("{skill}",skill);
+}
+
+// =========普通难度附加挑战=========
+function startExtraNormal(){
+    const countInput = document.getElementById("extraNormalCount");
+    const table = document.querySelector("#extraNormalTable tbody");
+    let count = parseInt(countInput.value);
+    if(isNaN(count) || count <1 || count>10) return;
+    table.innerHTML = "";
+    for(let i=0;i<count;i++){
+        const tr = document.createElement("tr");
+        const td1 = document.createElement("td");
+        const td2 = document.createElement("td");
+        td1.innerText = table.children.length + 1;
+        td2.innerText = generateExtraRuleNormal();
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        table.appendChild(tr);
+    }
+    btnExtraNormal.innerText = "再次抽取";
+}
+function clearExtraNormal(){
+    document.querySelector("#extraNormalTable tbody").innerHTML = "";
+    btnExtraNormal.innerText = "抽取";
+}
+
+// =========困难难度附加挑战=========
+function startExtraHard(){
+    const countInput = document.getElementById("extraHardCount");
+    const table = document.querySelector("#extraHardTable tbody");
+    let count = parseInt(countInput.value);
+    if(isNaN(count) || count <1 || count>10) return;
+    table.innerHTML = "";
+    for(let i=0;i<count;i++){
+        const tr = document.createElement("tr");
+        const td1 = document.createElement("td");
+        const td2 = document.createElement("td");
+        td1.innerText = table.children.length + 1;
+        td2.innerText = generateExtraRuleHard();
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        table.appendChild(tr);
+    }
+    btnExtraHard.innerText = "再次抽取";
+}
+function clearExtraHard(){
+    document.querySelector("#extraHardTable tbody").innerHTML = "";
+    btnExtraHard.innerText = "抽取";
+}
+//普通难度加分
 function addNormalPoint(){
-    normalPoint += 5;
+    const mainCount = +document.getElementById("normalRuleCount").value || 3;
+    const tableRows = document.querySelectorAll("#extraNormalTable tbody tr").length;
+    const baseTotal = mainCount * 5;
+    const addExtra = tableRows * 3;
+    const totalGain = baseTotal + addExtra;
+    normalPoint += totalGain;
     refreshPointView();
+    textNormalResult.innerText = `普通难度挑战完成！
+主挑战条数：${mainCount} ×5 = ${mainCount*5}分
+附加挑战${tableRows}条，额外${addExtra}分
+本次合计获得${totalGain}积分！`;
     openSuccessNormalModal();
     addNormalBtn.disabled = true;
 }
-// 困难难度加分 +10
+// 困难难度加分 +10；附加每条+5
 function addHardPoint(){
-    hardPoint += 10;
+    const mainCount = +document.getElementById("hardRuleCount").value || 4;
+    const tableRows = document.querySelectorAll("#extraHardTable tbody tr").length;
+    const baseTotal = mainCount * 10;
+    const addExtra = tableRows * 5;
+    const totalGain = baseTotal + addExtra;
+    hardPoint += totalGain;
     refreshPointView();
+    textHardResult.innerText = `困难难度挑战完成！
+主挑战条数：${mainCount} ×10 = ${mainCount*10}分
+附加挑战${tableRows}条，额外${addExtra}分
+本次合计获得${totalGain}积分！`;
     openSuccessHardModal();
     addHardBtn.disabled = true;
 }
@@ -326,49 +1159,8 @@ function clearAllPoint(){
     openClearSuccessModal();
 }
 
-// ==========普通难度挑战列表==========
-function startDrawNormal(){
-    let normalList = [
-        "在商店里禁止治疗罪人（如果是15牢请重新抽取）",
-        "仅可使用商店的治疗罪人或技能与被动来或事件治疗罪人（若奖励有治疗类E.G.O.可以拿 但是不可以进入战斗 恢复理智不算）",
-        "整局经费不可超过2000",
-        "禁止选择遭遇战奖励",
-        "禁止选择奖励的E.G.O饰品（观测和体系选择的饰品可以拿）",
-        "禁止判定失败",
-        "禁止观测泛用饰品"
-    ];
-    let randomIndex = Math.floor(Math.random() * normalList.length);
-    resultNormal.innerText = normalList[randomIndex];
-    addNormalBtn.disabled = false;
-}
-
-// ==========困难难度挑战列表==========
-function startDrawHard(){
-    let hardList = [
-        "禁止选择地狱鸡/凤·凰/由子弹画下的句点/憎恶与绝望",
-        "选择苦难时选择等效最高的（加算硬币威力+减算硬币威力->攻击等级>防御等级 基础威力与最终威力默认3等效但优先级比频点威力大）",
-        "最后一层走无尽的死路/纯洁的歌喉/紫色编码",
-        "不可以拿可以保命的E.G.O.（如：未孵化的火种 紧急授予型怀表）",
-        "整局经费不可超过1500",
-        "全程只允许携带最多2名输出罪人"
-    ];
-    let randomIndex = Math.floor(Math.random() * hardList.length);
-    resultHard.innerText = hardList[randomIndex];
-    addHardBtn.disabled = false;
-}
-
-// 展开收起
-function showText(){
-    let box = document.getElementById("content");
-    let button = document.getElementById("btn");
-    if(box.style.display === "none"){
-        box.style.display = "block";
-        button.innerText = "收起";
-    }else{
-        box.style.display = "none";
-        button.innerText = "展开";
-    }
-}
+// 初始化参数区域
+templateSelect.dispatchEvent(new Event("change"));
 </script>
 
 </body>
