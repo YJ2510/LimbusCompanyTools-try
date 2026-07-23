@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LimbusCompanyTool中文测试页面</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Microsoft Yahei", sans-serif;
+        }
+        body{
+            background-color: #363535;
+            padding: 30px 15px;
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        h1{
+            text-align: center;
+            color: #ffffff;
+            margin-bottom: 20px;
+        }
+        h2{
+            text-align: center;
+            color: #eeeeee;
+            margin: 24px 0;
+            font-weight: normal;
+        }
+        a{
+            color:#87cefa;
+            text-decoration: none;
+        }
+        a:hover{
+            color:#b8e0ff;
+            text-decoration: underline;
+        }
+        button {
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border: none;
+        }
+        button:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.35);
+        }
+        button:active:not(:disabled) {
+            transform: translateY(0);
+        }
+        button:disabled {
+            opacity: 0.45;
+            cursor: not-allowed;
+        }
+        /* 电脑端：横向并排 */
+        .row-wrap{
+            display: flex;
+            gap:20px;
+            margin-top:20px;
+        }
+        .col{
+            flex:1;
+            padding:20px;
+            background:#424141;
+            border-radius:12px;
+        }
+
+        /* ==========手机端媒体查询（核心）========== */
+        @media (max-width:650px){
+            .row-wrap{
+                flex-direction: column; /* 改为上下堆叠 */
+            }
+            h1{
+                font-size:24px;
+            }
+            h2{
+                font-size:20px;
+            }
+            #resultNormal,#resultHard{
+                font-size:18px !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <h1>欢迎来到<i>LimbusCompanyTool</i>中文页面</h1>
+
+    <!-- 积分显示区域 -->
+    <div style="text-align:center; color:#ffdd44; font-size:24px; margin-bottom:12px;">
+        普通难度积分：<span id="normalPoint">0</span>
+    </div>
+    <div style="text-align:center; color:#ff9966; font-size:24px; margin-bottom:12px;">
+        困难难度积分：<span id="hardPoint">0</span>
+    </div>
+    <div style="text-align:center; color:#ffffff; font-size:26px; margin-bottom:24px;">
+        ✦ 总但丁积分：<span id="totalPoint">0</span> ✦
+    </div>
+
+    <h2><p><a href="https://limbuscompany.huijiwiki.com/wiki/" target="_blank">点击以访问LimbusCompany中文维基</a></p></h2>
+
+<div style="text-align:center; margin:30px 0;">
+    <h2 style="display: inline-block;font-size: 30px; margin-right:12px;">镜牢挑战</h2>
+    <button id="btn" onclick="showText()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#555555; color:#fff;">展开</button>
+</div>
+
+<div id="content" style="display: none; text-align:center;">
+    <div class="row-wrap">
+        <!-- ==========普通难度分区========== -->
+        <div class="col">
+            <h2 style="margin-bottom:16px;">普通难度抽取</h2>
+            <button onclick="startDrawNormal()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#446699; color:white;">开始抽取</button>
+            <div id="resultNormal" style="margin-top:20px; font-size:22px; color:#fff; line-height:1.6;"></div>
+            <button id="addNormalBtn" disabled onclick="addNormalPoint()" style="padding:10px 24px; font-size:18px; border-radius:8px; margin-top:20px; background:#339933; color:white;">
+                完成本次挑战 +5积分
+            </button>
+        </div>
+
+        <!-- ==========困难难度分区========== -->
+        <div class="col">
+            <h2 style="margin-bottom:16px;">困难难度抽取</h2>
+            <button onclick="startDrawHard()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#773333; color:white;">开始抽取</button>
+            <div id="resultHard" style="margin-top:20px; font-size:22px; color:#fff; line-height:1.6;"></div>
+            <button id="addHardBtn" disabled onclick="addHardPoint()" style="padding:10px 24px; font-size:18px; border-radius:8px; margin-top:20px; background:#cc5522; color:white;">
+                完成本次挑战 +10积分
+            </button>
+        </div>
+    </div>
+</div>
+
+    <h2 style="line-height:1.7;">理想是很多084工具！！！目前只做了镜牢这块儿 目的是让打镜牢的但丁们不再无聊（对）然后请支持我（？？） 关注我好吧（不强求）目前暂未做其他功能，后续会慢慢完善的！！！但是也请大大们关注支持一下（（）有建议都可以提！我很乐意听大家的建议来完善！！！</h2>
+    <h2>抖音号：YJ2510.love</h2>
+
+    <!-- 清除积分按钮 -->
+    <div style="text-align:center; margin-top:40px;">
+        <button onclick="clearAllPoint()" style="padding:9px 22px; font-size:16px; border-radius:8px; background:#992222; color:white;">
+            清除全部积分
+        </button>
+    </div>
+
+<script>
+// ==========积分系统==========
+let normalPoint = Number(localStorage.getItem("normalDantePoint")) || 0;
+let hardPoint = Number(localStorage.getItem("hardDantePoint")) || 0;
+
+const normalPointDom = document.getElementById("normalPoint");
+const hardPointDom = document.getElementById("hardPoint");
+const totalPointDom = document.getElementById("totalPoint");
+
+const addNormalBtn = document.getElementById("addNormalBtn");
+const addHardBtn = document.getElementById("addHardBtn");
+const resultNormal = document.getElementById("resultNormal");
+const resultHard = document.getElementById("resultHard");
+
+// 刷新所有积分（自动计算总分）
+function refreshPointView(){
+    const total = normalPoint + hardPoint;
+    normalPointDom.innerText = normalPoint;
+    hardPointDom.innerText = hardPoint;
+    totalPointDom.innerText = total;
+    localStorage.setItem("normalDantePoint", normalPoint);
+    localStorage.setItem("hardDantePoint", hardPoint);
+}
+refreshPointView();
+
+// 普通难度加分 +5
+function addNormalPoint(){
+    normalPoint += 5;
+    refreshPointView();
+    alert("普通难度挑战完成！获得5积分！");
+    addNormalBtn.disabled = true;
+}
+// 困难难度加分 +10
+function addHardPoint(){
+    hardPoint += 10;
+    refreshPointView();
+    alert("困难难度挑战完成！获得10积分！");
+    addHardBtn.disabled = true;
+}
+
+// 清空所有积分
+function clearAllPoint(){
+    let sure = confirm("⚠️确认清除所有积分吗？该操作无法恢复！");
+    if(sure){
+        normalPoint = 0;
+        hardPoint = 0;
+        localStorage.removeItem("normalDantePoint");
+        localStorage.removeItem("hardDantePoint");
+        refreshPointView();
+        alert("积分已全部清除！");
+    }
+}
+
+// ==========普通难度挑战列表==========
+function startDrawNormal(){
+    let normalList = [
+        "在商店里禁止治疗罪人（如果是15牢请重新抽取）",
+        "仅可使用商店的治疗罪人或技能与被动来或事件治疗罪人（若奖励有治疗类E.G.O.可以拿 但是不可以进入战斗 恢复理智不算）",
+        "整局经费不可超过2000",
+        "禁止选择遭遇战奖励",
+        "禁止选择奖励的E.G.O饰品（观测和体系选择的饰品可以拿）",
+        "禁止判定失败",
+        "禁止观测泛用饰品"
+    ];
+    let randomIndex = Math.floor(Math.random() * normalList.length);
+    resultNormal.innerText = normalList[randomIndex];
+    addNormalBtn.disabled = false;
+}
+
+// ==========困难难度挑战列表==========
+function startDrawHard(){
+    let hardList = [
+        "禁止选择地狱鸡/凤·凰/由子弹画下的句点/憎恶与绝望",
+        "选择苦难时选择等效最高的（加算硬币威力+减算硬币威力->攻击等级>防御等级 基础威力与最终威力默认3等效但优先级比频点威力大）",
+        "最后一层走无尽的死路/纯洁的歌喉/紫色编码",
+        "不可以拿可以保命的E.G.O.（如：未孵化的火种 紧急授予型怀表）",
+        "整局经费不可超过1500",
+        "全程只允许携带最多2名输出罪人"
+    ];
+    let randomIndex = Math.floor(Math.random() * hardList.length);
+    resultHard.innerText = hardList[randomIndex];
+    addHardBtn.disabled = false;
+}
+
+// 展开收起
+function showText(){
+    let box = document.getElementById("content");
+    let button = document.getElementById("btn");
+    if(box.style.display === "none"){
+        box.style.display = "block";
+        button.innerText = "收起";
+    }else{
+        box.style.display = "none";
+        button.innerText = "展开";
+    }
+}
+</script>
+
+</body>
+</html>
