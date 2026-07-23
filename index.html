@@ -52,38 +52,98 @@
             opacity: 0.45;
             cursor: not-allowed;
         }
-        /* 电脑端：横向并排 */
+        /* 全局始终横向两栏 */
         .row-wrap{
             display: flex;
-            gap:20px;
+            gap:14px;
             margin-top:20px;
         }
         .col{
             flex:1;
-            padding:20px;
+            padding:16px;
             background:#424141;
             border-radius:12px;
         }
 
-        /* ==========手机端媒体查询（核心）========== */
+        /* 小屏幕优化：缩小间距、字体，不换行！ */
         @media (max-width:650px){
             .row-wrap{
-                flex-direction: column; /* 改为上下堆叠 */
+                flex-direction: row !important; /* 强制保持一行两列，不上下堆叠 */
+                gap:10px;
+            }
+            .col{
+                padding:12px;
             }
             h1{
-                font-size:24px;
+                font-size:22px;
             }
             h2{
-                font-size:20px;
+                font-size:18px;
             }
             #resultNormal,#resultHard{
-                font-size:18px !important;
+                font-size:16px !important;
             }
+            button{
+                font-size:15px !important;
+                padding:8px 12px !important;
+            }
+        }
+
+        /* =====弹窗通用样式===== */
+        .modal-mask{
+            display: none;
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.75);
+            z-index: 9999;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-box{
+            background:#424141;
+            padding:28px;
+            border-radius:12px;
+            max-width:400px;
+            width:90%;
+        }
+        .modal-box h3{
+            color:#fff;
+            margin-bottom:16px;
+            font-size:20px;
+        }
+        .modal-box p{
+            color:#dddddd;
+            margin-bottom:24px;
+            line-height:1.6;
+        }
+        .modal-buttons{
+            display:flex;
+            gap:14px;
+            justify-content:center;
+        }
+        /* 修改：取消按钮蓝色，确认红色 */
+        .btn-cancel{
+            background:#446699;
+            color:white;
+            padding:9px 22px;
+            border-radius:8px;
+        }
+        .btn-confirm{
+            background:#992222;
+            color:white;
+            padding:9px 22px;
+            border-radius:8px;
+        }
+        .btn-single{
+            background:#446699;
+            color:white;
+            padding:9px 22px;
+            border-radius:8px;
         }
     </style>
 </head>
 <body>
-    <h1>欢迎来到<i>LimbusCompanyTool</i>中文页面</h1>
+    <h1>欢迎来到<i>LimbusCompanyTool</i>中文测试页面</h1>
 
     <!-- 积分显示区域 -->
     <div style="text-align:center; color:#ffdd44; font-size:24px; margin-bottom:12px;">
@@ -132,9 +192,52 @@
 
     <!-- 清除积分按钮 -->
     <div style="text-align:center; margin-top:40px;">
-        <button onclick="clearAllPoint()" style="padding:9px 22px; font-size:16px; border-radius:8px; background:#992222; color:white;">
+        <button onclick="openClearModal()" style="padding:9px 22px; font-size:16px; border-radius:8px; background:#992222; color:white;">
             清除全部积分
         </button>
+    </div>
+
+    <!-- =========弹窗区域========= -->
+    <!-- 清除积分确认弹窗【按钮顺序调换：取消在前，确认在后】 -->
+    <div class="modal-mask" id="clearModal">
+        <div class="modal-box">
+            <h3>⚠️ 清除积分确认</h3>
+            <p>确认清除所有积分吗？该操作无法恢复！</p>
+            <div class="modal-buttons">
+                <button class="btn-cancel" onclick="closeClearModal()">取消</button>
+                <button class="btn-confirm" onclick="clearAllPoint()">确认清除</button>
+            </div>
+        </div>
+    </div>
+    <!-- 普通难度完成提示弹窗 -->
+    <div class="modal-mask" id="successNormalModal">
+        <div class="modal-box">
+            <h3>✅ 挑战完成</h3>
+            <p>普通难度挑战完成！获得5积分！</p>
+            <div class="modal-buttons">
+                <button class="btn-single" onclick="closeSuccessNormalModal()">确定</button>
+            </div>
+        </div>
+    </div>
+    <!-- 困难难度完成提示弹窗 -->
+    <div class="modal-mask" id="successHardModal">
+        <div class="modal-box">
+            <h3>✅ 挑战完成</h3>
+            <p>困难难度挑战完成！获得10积分！</p>
+            <div class="modal-buttons">
+                <button class="btn-single" onclick="closeSuccessHardModal()">确定</button>
+            </div>
+        </div>
+    </div>
+    <!-- 清除成功提示弹窗 -->
+    <div class="modal-mask" id="clearSuccessModal">
+        <div class="modal-box">
+            <h3>✅ 操作完成</h3>
+            <p>积分已全部清除！</p>
+            <div class="modal-buttons">
+                <button class="btn-single" onclick="closeClearSuccessModal()">确定</button>
+            </div>
+        </div>
     </div>
 
 <script>
@@ -151,6 +254,12 @@ const addHardBtn = document.getElementById("addHardBtn");
 const resultNormal = document.getElementById("resultNormal");
 const resultHard = document.getElementById("resultHard");
 
+// 弹窗DOM
+const clearModal = document.getElementById("clearModal");
+const successNormalModal = document.getElementById("successNormalModal");
+const successHardModal = document.getElementById("successHardModal");
+const clearSuccessModal = document.getElementById("clearSuccessModal");
+
 // 刷新所有积分（自动计算总分）
 function refreshPointView(){
     const total = normalPoint + hardPoint;
@@ -162,32 +271,59 @@ function refreshPointView(){
 }
 refreshPointView();
 
+// =========弹窗开关函数=========
+function openClearModal(){
+    clearModal.style.display = "flex";
+}
+function closeClearModal(){
+    clearModal.style.display = "none";
+}
+
+function openSuccessNormalModal(){
+    successNormalModal.style.display = "flex";
+}
+function closeSuccessNormalModal(){
+    successNormalModal.style.display = "none";
+}
+
+function openSuccessHardModal(){
+    successHardModal.style.display = "flex";
+}
+function closeSuccessHardModal(){
+    successHardModal.style.display = "none";
+}
+
+function openClearSuccessModal(){
+    clearSuccessModal.style.display = "flex";
+}
+function closeClearSuccessModal(){
+    clearSuccessModal.style.display = "none";
+}
+
 // 普通难度加分 +5
 function addNormalPoint(){
     normalPoint += 5;
     refreshPointView();
-    alert("普通难度挑战完成！获得5积分！");
+    openSuccessNormalModal();
     addNormalBtn.disabled = true;
 }
 // 困难难度加分 +10
 function addHardPoint(){
     hardPoint += 10;
     refreshPointView();
-    alert("困难难度挑战完成！获得10积分！");
+    openSuccessHardModal();
     addHardBtn.disabled = true;
 }
 
 // 清空所有积分
 function clearAllPoint(){
-    let sure = confirm("⚠️确认清除所有积分吗？该操作无法恢复！");
-    if(sure){
-        normalPoint = 0;
-        hardPoint = 0;
-        localStorage.removeItem("normalDantePoint");
-        localStorage.removeItem("hardDantePoint");
-        refreshPointView();
-        alert("积分已全部清除！");
-    }
+    normalPoint = 0;
+    hardPoint = 0;
+    localStorage.removeItem("normalDantePoint");
+    localStorage.removeItem("hardDantePoint");
+    refreshPointView();
+    closeClearModal();
+    openClearSuccessModal();
 }
 
 // ==========普通难度挑战列表==========
