@@ -860,14 +860,7 @@ function closeClearSuccessModal(){
     clearSuccessModal.style.display = "none";
 }
 
-function openExportModal(){
-    const saveObj = {
-        normal: normalPoint,
-        hard: hardPoint
-    }
-    exportText.value = btoa(JSON.stringify(saveObj));
-    exportModal.style.display = "flex";
-}
+
 function closeExportModal(){
     exportModal.style.display = "none";
 }
@@ -897,10 +890,28 @@ function closeImportFailModal(){
 }
 
 // 导入存档逻辑
+// 安全UTF8 base64工具函数（不要删除！）
+function utf8ToBase64(str) {
+    return btoa(unescape(encodeURIComponent(str)));
+}
+function base64ToUtf8(b64) {
+    return decodeURIComponent(escape(atob(b64)));
+}
+
+function openExportModal(){
+    const saveObj = {
+        normal: normalPoint,
+        hard: hardPoint
+    }
+    const jsonStr = JSON.stringify(saveObj);
+    exportText.value = utf8ToBase64(jsonStr);
+    exportModal.style.display = "flex";
+}
+
 function importSave(){
     try{
         const str = importText.value.trim();
-        const jsonStr = atob(str);
+        const jsonStr = base64ToUtf8(str);
         const saveData = JSON.parse(jsonStr);
         normalPoint = Number(saveData.normal) || 0;
         hardPoint = Number(saveData.hard) || 0;
@@ -908,6 +919,7 @@ function importSave(){
         closeImportModal();
         openImportSuccessModal();
     }catch(err){
+        console.error("导入失败",err);
         openImportFailModal();
     }
 }
