@@ -68,7 +68,10 @@
             background:#424141;
             border-radius:12px;
         }
-
+        /* 竖版布局样式 */
+        .row-wrap.vertical-mode{
+            flex-direction: column !important;
+        }
         /* 小屏幕优化：缩小间距、字体，不换行！ */
         @media (max-width:650px){
             .row-wrap{
@@ -215,12 +218,13 @@
         }
         /* DIY挑战区域 */
         .diy-wrap{
-            max-width:900px;
-            margin:30px auto;
-            background:#424141;
-            border-radius:12px;
-            padding:16px;
-        }
+           max-width:900px;
+           margin:30px auto;
+           margin-top:24px;
+           background:#424141;
+           border-radius:12px;
+           padding:16px;
+}
         .template-select{
             width:100%;
             padding:8px;
@@ -279,7 +283,7 @@
         </div>
     </div>
     <div style="text-align:center; color:#ffffff; font-size:26px; margin-bottom:12px;">
-        ✦ 总但丁积分：<span id="totalPoint">0</span> ✦
+        ✦ 总积分：<span id="totalPoint">0</span> ✦
     </div>
     <!-- 存档按钮组 -->
     <div class="btn-group">
@@ -301,45 +305,64 @@
 <div style="text-align:center; margin:30px 0;">
     <h2 style="display: inline-block;font-size: 30px; margin-right:12px;">镜牢挑战</h2>
     <button id="btn" onclick="showText()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#555555; color:#fff;">展开</button>
+    <button id="switchLayoutBtn" onclick="switchLayout()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#446699; color:#fff; margin-left:8px;">切换竖/横版</button>
 </div>
 
 <div id="content" style="display: none; text-align:center;">
-    <div class="row-wrap">
-        <!-- ==========普通难度分区========== -->
-        <div class="col">
-            <h2 style="margin-bottom:16px;">普通难度抽取</h2><span>生成条数：</span>
+    <div id="challengeRowWrap" class="row-wrap">
+<!-- ==========普通难度分区========== -->
+<div class="col">
+    <h2 style="margin-bottom:16px;">普通难度抽取</h2><span>生成条数：</span>
 <input id="normalRuleCount" type="number" min="1" max="8" value="3">
-            <button id="btnNormalDraw" onclick="startDrawNormal()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#446699; color:white;">开始抽取</button>
-            <div id="resultNormal" style="margin-top:20px; font-size:22px; color:#fff; line-height:1.6;"></div>
-            <button id="addNormalBtn" disabled onclick="addNormalPoint()" style="padding:10px 24px; font-size:18px; border-radius:8px; margin-top:20px; background:#339933; color:white;">
-                完成本次挑战
-            </button>
-            <hr style="margin:20px 0; border-color:#555;">
-            <h3 style="color:#ddd;margin-bottom:12px;">附加挑战抽取</h3>
-            <div class="extra-control">
-                <span style="color:#ddd;">条数</span>
-                <input type="number" id="extraNormalCount" min="1" max="10" value="1">
-                <button id="btnExtraNormal" onclick="startExtraNormal()" style="padding:6px 12px; background:#664499; color:white; border-radius:8px;">抽取</button>
-                <button onclick="clearExtraNormal()" style="padding:6px 12px; background:#666; color:white; border-radius:8px;">清空列表</button>
-            </div>
-            <table class="extra-table" id="extraNormalTable">
-                <thead>
-                    <tr>
-                        <th>序号</th>
-                        <th>挑战条件</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            </table>
-        </div>
-
+    <button id="btnNormalDraw" onclick="startDrawNormal()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#446699; color:white;">开始抽取</button>
+    <table class="extra-table" id="mainNormalTable">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>挑战规则</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
+<button onclick="startDrawNormal()" style="padding:8px 16px; font-size:16px; border-radius:8px; background:#5577bb; color:white;margin-top:8px;">刷新全部条目</button>    <button id="addNormalBtn" disabled onclick="addNormalPoint()" style="padding:10px 24px; font-size:18px; border-radius:8px; margin-top:20px; background:#339933; color:white;">
+        完成本次挑战
+    </button>
+    <hr style="margin:20px 0; border-color:#555;">
+    <h3 style="color:#ddd;margin-bottom:12px;">附加挑战抽取</h3>
+    <div class="extra-control">
+        <span style="color:#ddd;">条数</span>
+        <input type="number" id="extraNormalCount" min="1" max="10" value="1">
+        <button id="btnExtraNormal" onclick="startExtraNormal()" style="padding:6px 12px; background:#664499; color:white; border-radius:8px;">抽取</button>
+        <button onclick="clearExtraNormal()" style="padding:6px 12px; background:#666; color:white; border-radius:8px;">清空列表</button>
+    </div>
+    <table class="extra-table" id="extraNormalTable">
+        <thead>
+            <tr>
+                <th>序号</th>
+                <th>挑战条件</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody></tbody>
+    </table>
+    </div>
         <!-- ==========困难难度分区========== -->
         <div class="col">
             <h2 style="margin-bottom:16px;">困难难度抽取</h2>
             <span>生成条数：</span>
 <input id="hardRuleCount" type="number" min="1" max="8" value="4">
             <button id="btnHardDraw" onclick="startDrawHard()" style="padding:10px 24px; font-size:18px; border-radius:8px; background:#773333; color:white;">开始抽取</button>
-            <div id="resultHard" style="margin-top:20px; font-size:22px; color:#fff; line-height:1.6;white-space:pre-line;text-align:left;padding:0 10px;"></div>
+            <table class="extra-table" id="mainHardTable">
+    <thead>
+        <tr>
+            <th>序号</th>
+            <th>挑战规则</th>
+            <th>操作</th>
+        </tr>
+    </thead>
+    <tbody></tbody>
+</table>
             <button id="addHardBtn" disabled onclick="addHardPoint()" style="padding:10px 24px; font-size:18px; border-radius:8px; margin-top:20px; background:#cc5522; color:white;">
                 完成本次挑战
             </button>
@@ -356,10 +379,11 @@
                     <tr>
                         <th>序号</th>
                         <th>挑战条件</th>
+                        <th>操作</th>
                     </tr>
                 </thead>
                 <tbody></tbody>
-            </table>
+</table>
         </div>
     </div>
 
@@ -508,10 +532,30 @@
     </div>
 
 <script>
+    // 横竖布局切换
+function switchLayout(){
+    const wrap = document.getElementById("challengeRowWrap");
+    if(wrap.classList.contains("vertical-mode")){
+        wrap.classList.remove("vertical-mode");
+        localStorage.setItem("layoutMode","horizontal");
+    }else{
+        wrap.classList.add("vertical-mode");
+        localStorage.setItem("layoutMode","vertical");
+    }
+}
+// 页面加载自动恢复上次布局
+(function initLayout(){
+    const mode = localStorage.getItem("layoutMode");
+    const wrap = document.getElementById("challengeRowWrap");
+    if(mode === "vertical"){
+        wrap.classList.add("vertical-mode");
+    }
+})();
 // ==========积分系统==========
 let normalPoint = Number(localStorage.getItem("normalDantePoint")) || 0;
 let hardPoint = Number(localStorage.getItem("hardDantePoint")) || 0;
-
+let normalRuleList = [];
+let hardRuleList = [];
 const normalPointDom = document.getElementById("normalPoint");
 const hardPointDom = document.getElementById("hardPoint");
 const totalPointDom = document.getElementById("totalPoint");
@@ -896,8 +940,8 @@ function startDrawNormal(){
 
     const allTemplates = [...normalRuleTemplates, ...banPackRuleTemplates];
 
-    const selected = [];
-    while(selected.length < pickCount){
+    normalRuleList = [];
+    while(normalRuleList.length < pickCount){
         const idx = getRandomInt(0, allTemplates.length-1);
         let rule = allTemplates[idx];
         if(rule.includes("{pack}")){
@@ -914,18 +958,87 @@ function startDrawNormal(){
             }
             rule = `禁止选择${pickedPacks.join("、")}卡包`;
         }
-        selected.push(rule);
+        normalRuleList.push(rule);
     }
-
-    let outText = "【普通随机挑战】\n";
-    selected.forEach((r,i)=>{
-        outText += `${i+1}. ${r}\n`;
-    });
-    resultNormal.innerText = outText;
+    renderMainNormalTable();
     addNormalBtn.disabled = false;
     btnNormalDraw.innerText = "再次抽取";
 }
 
+// 渲染普通主挑战表格
+function renderMainNormalTable(){
+    const tbody = document.querySelector("#mainNormalTable tbody");
+    tbody.innerHTML = "";
+    normalRuleList.forEach((rule,i)=>{
+        const tr = document.createElement("tr");
+        const td1 = document.createElement("td");
+        const td2 = document.createElement("td");
+        const td3 = document.createElement("td");
+        td1.innerText = i+1;
+        td2.innerText = rule;
+        td3.innerHTML = `<button class="btn-del-line" style="background:#5577bb;margin-right:4px;" onclick="refreshSingleNormalMain(this)">刷新</button>
+<button class="btn-del-line" onclick="delSingleNormalMain(this)">删除</button>`;
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tbody.appendChild(tr);
+    });
+}
+
+// 普通主挑战：单行刷新
+function refreshSingleNormalMain(btn){
+    const tr = btn.closest("tr");
+    const idx = Array.from(tr.parentNode.children).indexOf(tr);
+
+    const normalRuleTemplates = [
+        "在商店里禁止治疗罪人",
+        "仅可使用商店的治疗罪人或技能与被动来或事件治疗罪人（若奖励有治疗类E.G.O.可以拿 但是不可以进入战斗 恢复理智不算）",
+        "整局经费不可超过2000",
+        "禁止选择遭遇战奖励",
+        "禁止选择奖励的E.G.O饰品（观测和体系选择的饰品可以拿）",
+        "禁止判定失败",
+        "禁止观测泛用饰品"
+    ];
+    const banPackRuleTemplates = [];
+    packList1.forEach(p=>banPackRuleTemplates.push(`禁止选择{pack}卡包`));
+    packList3.forEach(p=>banPackRuleTemplates.push(`禁止选择{pack}卡包`));
+    const allTemplates = [...normalRuleTemplates, ...banPackRuleTemplates];
+
+    let rule = allTemplates[getRandomInt(0, allTemplates.length-1)];
+    if(rule.includes("{pack}")){
+        const sourcePacks = [...packList1, ...packList3];
+        const numPick = getRandomInt(1,5);
+        const pickedPacks = [];
+        const packUsed = new Set();
+        while(pickedPacks.length < numPick){
+            const pi = getRandomInt(0, sourcePacks.length-1);
+            if(!packUsed.has(pi)){
+                packUsed.add(pi);
+                pickedPacks.push(sourcePacks[pi]);
+            }
+        }
+        rule = `禁止选择${pickedPacks.join("、")}卡包`;
+    }
+    normalRuleList[idx] = rule;
+    tr.cells[1].innerText = rule;
+}
+
+// 普通主挑战：单行删除（最少保留1条）
+function delSingleNormalMain(btn){
+    const tr = btn.closest("tr");
+    const tbody = tr.parentNode;
+    if(tbody.children.length <= 1){
+        alert("主挑战至少保留一条，无法删除！");
+        return;
+    }
+    const idx = Array.from(tbody.children).indexOf(tr);
+    normalRuleList.splice(idx,1);
+    tr.remove();
+    // 重排序号
+    Array.from(tbody.children).forEach((row,i)=>{
+        row.cells[0].innerText = i+1;
+    });
+}
 // ==========困难难度抽取【修改后】==========
 function startDrawHard(){
     const pickCount = +document.getElementById("hardRuleCount").value || 4;
@@ -970,9 +1083,8 @@ function startDrawHard(){
 
     const allTemplates = [...normalRuleTemplates, ...banPackRuleTemplates];
 
-    const selected = [];
-    // ===== 删除usedIndex，不再强制不重复，杜绝死循环 =====
-    while(selected.length < pickCount){
+    hardRuleList = [];
+    while(hardRuleList.length < pickCount){
         const idx = getRandomInt(0, allTemplates.length-1);
         let rule = allTemplates[idx];
         if(rule.includes("{pack}")){
@@ -989,16 +1101,111 @@ function startDrawHard(){
             }
             rule = `禁止选择${pickedPacks.join("、")}卡包`;
         }
-        selected.push(rule);
+        hardRuleList.push(rule);
     }
-
-    let outText = "【困难随机挑战】\n";
-    selected.forEach((r,i)=>{
-        outText += `${i+1}. ${r}\n`;
-    });
-    resultHard.innerText = outText;
+    renderMainHardTable();
     addHardBtn.disabled = false;
     btnHardDraw.innerText = "再次抽取";
+}
+
+// 渲染困难主挑战表格
+function renderMainHardTable(){
+    const tbody = document.querySelector("#mainHardTable tbody");
+    tbody.innerHTML = "";
+    hardRuleList.forEach((rule,i)=>{
+        const tr = document.createElement("tr");
+        const td1 = document.createElement("td");
+        const td2 = document.createElement("td");
+        const td3 = document.createElement("td");
+        td1.innerText = i+1;
+        td2.innerText = rule;
+        td3.innerHTML = `<button class="btn-del-line" style="background:#5577bb;margin-right:4px;" onclick="refreshSingleHardMain(this)">刷新</button>
+<button class="btn-del-line" onclick="delSingleHardMain(this)">删除</button>`;
+        tr.appendChild(td1);
+        tr.appendChild(td2);
+        tr.appendChild(td3);
+        tbody.appendChild(tr);
+    });
+}
+
+// 困难主挑战：单行刷新
+function refreshSingleHardMain(btn){
+    const tr = btn.closest("tr");
+    const idx = Array.from(tr.parentNode.children).indexOf(tr);
+
+    const normalRuleTemplates = [];
+    packList2.forEach(p=>{
+        normalRuleTemplates.push(`在第${getRandomInt(11,15)}层走${p}卡包`);
+    });
+    packList2.forEach(p=>{
+        normalRuleTemplates.push(`最后一层走${p}卡包`);
+    });
+    normalRuleTemplates.push(`整局经费不可超过${getRandomInt(1500,2000)}`);
+    normalRuleTemplates.push(`全程只允许编入${getRandomInt(1,7)}名罪人`);
+    condOptionList.forEach(c=>{
+        normalRuleTemplates.push(`禁止观测${c}`);
+    });
+    judgeList.forEach(j=>{
+        normalRuleTemplates.push(`禁止判定${j}`);
+    });
+    rewardTypeList.forEach(r=>{
+        normalRuleTemplates.push(`禁止选择${r}`);
+    });
+    sinnerNameList.forEach(sin=>{
+        normalRuleTemplates.push(`${sin}的血量低于${getRandomInt(10,90)}%时，走事件不能触发遭遇战`);
+    });
+    normalRuleTemplates.push(`全队平均血量低于${getRandomInt(10,90)}%时，走事件不能触发遭遇战`);
+    condOptionList.forEach(c=>{
+        normalRuleTemplates.push(`在（${getRandomInt(1,15)}）层不可以获得${c}`);
+    });
+    condOptionList.forEach(c=>{
+        normalRuleTemplates.push(`本次挑战必须携带${c}进入镜牢`);
+    });
+    skillOptionList.forEach(sk=>{
+        normalRuleTemplates.push(`到达（${getRandomInt(1,14)}）层前，不能使用${sk}技能`);
+        normalRuleTemplates.push(`在（${getRandomInt(1,15)}）层不可以使用${sk}技能`);
+    });
+    normalRuleTemplates.push(`（${getRandomInt(1,15)}）层结束前，禁止拾取任何补给`);
+
+    const banPackRuleTemplates = [];
+    packList1.forEach(p=>banPackRuleTemplates.push(`禁止选择{pack}卡包`));
+    packList3.forEach(p=>banPackRuleTemplates.push(`禁止选择{pack}卡包`));
+    const allTemplates = [...normalRuleTemplates, ...banPackRuleTemplates];
+
+    let rule = allTemplates[getRandomInt(0, allTemplates.length-1)];
+    if(rule.includes("{pack}")){
+        const sourcePacks = [...packList1, ...packList3];
+        const numPick = getRandomInt(1,5);
+        const pickedPacks = [];
+        const packUsed = new Set();
+        while(pickedPacks.length < numPick){
+            const pi = getRandomInt(0, sourcePacks.length-1);
+            if(!packUsed.has(pi)){
+                packUsed.add(pi);
+                pickedPacks.push(sourcePacks[pi]);
+            }
+        }
+        rule = `禁止选择${pickedPacks.join("、")}卡包`;
+    }
+    hardRuleList[idx] = rule;
+    tr.cells[1].innerText = rule;
+}
+
+// 困难主挑战：单行删除（最少保留1条）
+function delSingleHardMain(btn){
+    const tr = btn.closest("tr");
+    const tbody = tr.parentNode;
+    if(tbody.children.length <= 1){
+        alert("主挑战至少保留一条，无法删除！");
+        return;
+    }
+    const idx = Array.from(tbody.children).indexOf(tr);
+    hardRuleList.splice(idx,1);
+    tr.remove();
+    // 重排序号
+    Array.from(tbody.children).forEach((row,i)=>{
+        row.cells[0].innerText = i+1;
+    });
 }
 // 展开收起
 function showText(){
@@ -1079,17 +1286,17 @@ function startExtraNormal(){
         const tr = document.createElement("tr");
         const td1 = document.createElement("td");
         const td2 = document.createElement("td");
+        const td3 = document.createElement("td");
         td1.innerText = table.children.length + 1;
         td2.innerText = generateExtraRuleNormal();
+        td3.innerHTML = `<button class="btn-del-line" style="background:#5577bb;margin-right:4px;" onclick="refreshSingleNormal(this)">刷新</button>
+<button class="btn-del-line" onclick="delExtraNormalRow(this)">删除</button>`;
         tr.appendChild(td1);
         tr.appendChild(td2);
+        tr.appendChild(td3);
         table.appendChild(tr);
     }
     btnExtraNormal.innerText = "再次抽取";
-}
-function clearExtraNormal(){
-    document.querySelector("#extraNormalTable tbody").innerHTML = "";
-    btnExtraNormal.innerText = "抽取";
 }
 
 // =========困难难度附加挑战=========
@@ -1103,21 +1310,65 @@ function startExtraHard(){
         const tr = document.createElement("tr");
         const td1 = document.createElement("td");
         const td2 = document.createElement("td");
+        const td3 = document.createElement("td");
         td1.innerText = table.children.length + 1;
         td2.innerText = generateExtraRuleHard();
+        td3.innerHTML = `<button class="btn-del-line" style="background:#5577bb;margin-right:4px;" onclick="refreshSingleHard(this)">刷新</button>
+<button class="btn-del-line" onclick="delExtraHardRow(this)">删除</button>`;
         tr.appendChild(td1);
         tr.appendChild(td2);
+        tr.appendChild(td3);
         table.appendChild(tr);
     }
     btnExtraHard.innerText = "再次抽取";
 }
-function clearExtraHard(){
-    document.querySelector("#extraHardTable tbody").innerHTML = "";
-    btnExtraHard.innerText = "抽取";
+// 普通附加挑战单行删除
+function delExtraNormalRow(btn){
+    const tr = btn.closest("tr");
+    const tbody = document.querySelector("#extraNormalTable tbody");
+    if(tbody.querySelectorAll("tr").length <= 1){
+        alert("附加挑战至少保留一条，无法删除！");
+        return;
+    }
+    tr.remove();
+    // 重排序号
+    const rows = tbody.querySelectorAll("tr");
+    rows.forEach((r,i)=>{
+        r.children[0].innerText = i+1;
+    });
+}
+//删除算法困难
+function delExtraHardRow(btn){
+    const tr = btn.closest("tr");
+    const tbody = document.querySelector("#extraHardTable tbody");
+    // 判断：条目≤1，禁止删除
+    if(tbody.querySelectorAll("tr").length <= 1){
+        alert("附加挑战至少保留一条，无法删除！");
+        return;
+    }
+    // 正常情况走到这里执行删除
+    tr.remove();
+    // 重排序号
+    const rows = tbody.querySelectorAll("tr");
+    rows.forEach((r,i)=>{
+        r.children[0].innerText = i+1;
+    });
+}
+// 普通附加：刷新单行
+function refreshSingleNormal(btn){
+    const tr = btn.closest("tr");
+    const newRule = generateExtraRuleNormal();
+    tr.cells[1].innerText = newRule;
+}
+// 困难附加：刷新单行
+function refreshSingleHard(btn){
+    const tr = btn.closest("tr");
+    const newRule = generateExtraRuleHard();
+    tr.cells[1].innerText = newRule;
 }
 //普通难度加分
 function addNormalPoint(){
-    const mainCount = +document.getElementById("normalRuleCount").value || 3;
+    const mainCount = document.querySelectorAll("#mainNormalTable tbody tr").length;
     const tableRows = document.querySelectorAll("#extraNormalTable tbody tr").length;
     const baseTotal = mainCount * 5;
     const addExtra = tableRows * 3;
@@ -1131,9 +1382,9 @@ function addNormalPoint(){
     openSuccessNormalModal();
     addNormalBtn.disabled = true;
 }
-// 困难难度加分 +10；附加每条+5
+// 困难难度加分
 function addHardPoint(){
-    const mainCount = +document.getElementById("hardRuleCount").value || 4;
+    const mainCount = document.querySelectorAll("#mainHardTable tbody tr").length;
     const tableRows = document.querySelectorAll("#extraHardTable tbody tr").length;
     const baseTotal = mainCount * 10;
     const addExtra = tableRows * 5;
